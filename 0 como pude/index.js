@@ -9,12 +9,10 @@ function presentacion() {
     console.log("4 Cerrar ");
 }
 
-// Función para editar un elemento complemento 
-function editar_elemento_complemento(lista, indice) {
-    const elemento = lista[indice - 1];
-
+//funcion limpiar pantalla
+function clearScreem(){
+    console.clear();
 }
-
 // Función para agregar un elemento a la lista.
 function agregar_elemento() {
     let titulo, descripcion, vencimiento, dificultad;
@@ -25,25 +23,27 @@ function agregar_elemento() {
         // Intentar convertir la cadena a un objeto Date
         vencimiento = new Date(fechaTexto);
     } while (isNaN(vencimiento.getTime()));
-    dificultad = ingreso_datos.questionInt("Dificultad(1-facil 2-medio 3-dificil): \n");
+    while(dificultad != 1 && dificultad != 2 && dificultad != 3 ){
+        dificultad = ingreso_datos.questionInt("Dificultad(1-facil 2-medio 3-dificil): \n");
+    }
     return new tarea(titulo, descripcion, vencimiento, dificultad);
 }
 
 
 // Función para ver los detalles de una tarea.
 function detalle_tarea(lista) {
-    let desicion = 0;
-    let seleccion = ingreso_datos.questionInt("Si deseas ver en detalle una de estas tareas selecciona su indice, si no, presiona 0 u otra tecla distinta de los indices existentes\n");
-    if (seleccion <= lista.length && seleccion > 0) {
-        detalle_tarea_complemento(lista, seleccion);
-    }
-    desicion = ingreso_datos.question("Si deseas modificar esta tarea presiona: e   si no, presiona otra tecla\n");
-    if (desicion === "e") {
+    let desicion = 0;// variable de entrada, si decide o no editar la tarea "seleccionada"
+    let seleccion = ingreso_datos.question("Si deseas ver en detalle una de estas tareas selecciona su indice, si no, presiona 0 u otra tecla distinta de los indices existentes\n");
+  
+    if (!isNaN(seleccion) && seleccion > 0 && seleccion <= lista.length) {
+      detalle_tarea_complemento(lista, seleccion);
+      desicion = ingreso_datos.question("Si deseas modificar esta tarea presiona 'e'. Si no, presiona cualquier otra tecla.\n");
+  
+      if (desicion.toLowerCase() === "e") {
         lista[seleccion - 1].editar();
+      }
     }
-}
-
-
+  }
 // Función para mostrar los detalles de una tarea.
 function detalle_tarea_complemento(lista, indice) {
     const elemento = lista[indice - 1];
@@ -57,7 +57,7 @@ function detalle_tarea_complemento(lista, indice) {
     console.log(`Fecha de Vencimiento: ${formatDate(elemento.vencimiento) || 'No especificada'}`);
 }
 
-// Función para formatear una fecha.
+// Función para formatear una fecha. Lo siento por el nombre en ingles xd 
 function formatDate(dateString) {
     if (!dateString) {
         return '';
@@ -73,7 +73,18 @@ function CasoUno() {
     console.log("4 Finalizado");
     console.log("5 Volver");
 }
-
+// no es en si una funcion buscar, solo muestra los elementos de una lista. El nombre es por conveniencia 
+function buscar_elemento(lista) {
+    if (lista.length > 0) {
+        lista.forEach((elemento, index) => {
+            console.log(`${index + 1}. ${elemento.titulo}`);
+        });
+    } else {
+        clearScreem();
+        console.log("Elemento no encontrado");
+        
+    }
+}
 
 // Función para ver la lista de tareas en estado "Todo".
 function verLista_todo(lista) {
@@ -82,7 +93,9 @@ function verLista_todo(lista) {
             console.log(`${index + 1}. ${elemento.titulo}`);
         });
     } else {
+        clearScreem();
         console.log("La agenda está vacía");
+        
     }
 }
 
@@ -95,7 +108,9 @@ function verLista_pendiente(lista) {
             }
         });
     } else {
+        clearScreem();
         console.log("La agenda está vacía");
+        
     }
 }
 
@@ -108,7 +123,9 @@ function verLista_curso(lista) {
             }
         });
     } else {
+        clearScreem();
         console.log("La agenda está vacía");
+      
     }
 }
 
@@ -121,6 +138,7 @@ function verLista_terminado(lista) {
             }
         });
     } else {
+        clearScreem();
         console.log("La agenda está vacía");
     }
 }
@@ -141,6 +159,7 @@ do {
             do {
                 CasoUno();
                 ingreso = ingreso_datos.questionInt("Dime Cual de estas opciones deseas:\n")
+                clearScreem();
                 switch (ingreso) {
                     case 1:
                         verLista_todo(lista);
@@ -164,7 +183,7 @@ do {
 
                         break;
                     case 4:
-                        verLista_curso(lista);
+                        verLista_terminado(lista);
                         if (lista.length != 0) {
                             detalle_tarea(lista)
                         }
@@ -182,10 +201,10 @@ do {
 
             break;
         case 2:
-            //Esta linea crea otra lista conteniendo aquellos elementos que cumplan la busqueda en "lista" 
-            resultado_busqueda = lista.filter((objeto) => objeto.titulo.includes(ingreso_datos.question("Dime el titulo de la tarea que deseas buscar: \n"))); 
+            //Esta linea crea otra lista conteniendo aquellos elementos que cumplan la busqueda en "lista"  esta busqueda no diferencia mayusculas de minusculas con el metodo thelowercase 
+            resultado_busqueda = lista.filter((objeto) => objeto.titulo.toLowerCase().includes(ingreso_datos.question("Dime el titulo de la tarea que deseas buscar: \n").toLowerCase())); 
             if (lista.length != 0) {
-                verLista_todo(resultado_busqueda);//reutilizo la funcion
+                buscar_elemento(resultado_busqueda);//reutilizo la funcion
                 detalle_tarea(lista)
             }else{console.log("No hay ningun resultado en la agenda");}
 
