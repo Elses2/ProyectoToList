@@ -1,27 +1,29 @@
 const readline = require('readline-sync');
 const Tarea = require('./Tarea');
 const Lista = require('./Lista');
+const kleur = require('kleur');///cambia de color texto en terminal 
+const emoji = require('node-emoji');///poner emojis
 
 function introduccion() {
-    console.log("[1] Ver tarea");
-    console.log("[2] Buscar Tarea");
-    console.log("[3] Agregar Tarea");
-    console.log("[4] Cerrar");
+    console.log(`${kleur.green('1')} Ver tarea `);
+    console.log(`${kleur.green('2')} Buscar Tarea`);
+    console.log(`${kleur.green('3')} Agregar Tarea`);
+    console.log(`${kleur.green('4')} Cerrar `);
 }
 
 function CasoUno() {
-    console.log("[1] Todo");
-    console.log("[2] Pendiente");
-    console.log("[3] En Curso");
-    console.log("[4] Finalizado");
-    console.log("[5] Volver");
+    console.log(`${kleur.bgMagenta('1')} todo `);
+    console.log(`${kleur.bgMagenta('2')} Pendientes`);
+    console.log(`${kleur.bgMagenta('3')} Tareas en Curso`);
+    console.log(`${kleur.bgMagenta('4')} Tareas Finalizadas`);
+    console.log(`${kleur.bgMagenta('5')} Volver`);
 }
 
 let botonS;
 let boton = 0;
 let condicion = 2;
 let condicion_caso_uno = 0;
-
+console.log('\x1b[36mBienvenido al proyecto \x1b[35mAgenda\x1b[0m: aquí podrás organizar tus tareas \u2764️');
 do {
     introduccion();
     botonS = readline.question("Dime Cual de estas opciones deseas:\n");
@@ -82,7 +84,7 @@ do {
             Lista.lista.push(Tarea.ingresar());
             break;
         case 4:
-            console.log("Gracias por usarnos");
+            console.log('\x1b[36mGracias por usar \x1b[35mAgenda\x1b[0m: no olvides organizar tus tareas \u2764️');
             condicion = 1;
             break;
         default:
