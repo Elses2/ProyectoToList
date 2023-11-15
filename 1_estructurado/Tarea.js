@@ -55,7 +55,7 @@ function editar(x) {
 }
 
 function buscar(lista) {
-    const cadenaABuscar = readline.question("Dime el título de la tarea que deseas buscar: ").toLowerCase();
+    const cadenaABuscar = readline.question("Dime el titulo de la tarea que deseas buscar: ").toLowerCase();
 
     const tareasEncontradas = lista.filter((object) => {
         return object.titulo.toLowerCase().includes(cadenaABuscar);
