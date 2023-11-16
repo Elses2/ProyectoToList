@@ -1,9 +1,18 @@
-const ingreso_teclado = require('readline-sync');
-const kleur = require('kleur');
-const emoji = require('node-emoji');
+import * as ingreso_teclado from 'readline-sync'; // ingreso de datos asincrono
+import * as kleur from 'kleur'; // cambia de color texto en terminal
+import * as emoji from 'node-emoji'; // poner emojis
+
 
 class Tarea {
-    constructor(titulo, descripcion, vencimiento, dificultad) {
+    titulo: string;
+    descripcion: string;
+    estado: number;
+    creacion: Date;
+    ultima_edicion: Date;
+    vencimiento: Date;
+    dificultad: number;
+
+    constructor(titulo: string, descripcion: string, vencimiento: Date, dificultad: number) {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.estado = 1;
@@ -14,7 +23,7 @@ class Tarea {
     }
 
     /// métodos
-    editar() {
+    editar(): void {
         this.titulo = ingreso_teclado.question("Titulo: \n");
         this.descripcion = ingreso_teclado.question("Descripcion: \n");
         this.estado = 5;
@@ -40,4 +49,4 @@ class Tarea {
     }
 }
 
-module.exports = Tarea;
+export default Tarea;

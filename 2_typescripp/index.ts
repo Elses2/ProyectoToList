@@ -1,4 +1,4 @@
-import * as tarea from './tarea';
+import tarea from './tarea';
 import * as ingreso_datos from 'readline-sync'; // ingreso de datos asincrono
 import * as kleur from 'kleur'; // cambia de color texto en terminal
 import * as emoji from 'node-emoji'; // poner emojis
@@ -31,17 +31,17 @@ function agregar_elemento() {
         console.log(`${kleur.green(`1.Facil ${emoji.get('smile')}`)}\n${kleur.yellow(`2.Medio ${emoji.get('neutral_face')}`)}\n${kleur.red(`3.Dificil ${emoji.get('rage')}`)}`);
         dificultad = ingreso_datos.questionInt();
     }
-    return new tarea.Tarea(titulo, descripcion, vencimiento, dificultad);
+    return new tarea(titulo, descripcion, vencimiento, dificultad);
 }
 
 // Función para ver los detalles de una tarea.
-function detalle_tarea(lista: tarea.Tarea[]) {
-    let desicion = 0; // variable de entrada, si decide o no editar la tarea "seleccionada"
+function detalle_tarea(lista: tarea[]) {
+    let desicion :String; // variable de entrada, si decide o no editar la tarea "seleccionada"
     let seleccion = ingreso_datos.question(`${kleur.blue('Selecciona la tarea que deseas ver')} si no ${kleur.blue('presiona 0')}\n`);
 
     if (!isNaN(Number(seleccion)) && Number(seleccion) > 0 && Number(seleccion) <= lista.length) {
         detalle_tarea_complemento(lista, Number(seleccion));
-        desicion = ingreso_datos.question(`Si deseas modificar esta tarea ${kleur.blue('presiona e')}. Si no, presiona cualquier otra tecla.\n`);
+        desicion = ingreso_datos.question(`Si deseas modificar esta tarea ${kleur.blue('presiona e')}. Si no, presiona cualquier otra tecla.\n`);                                           //////fija correccion de validacion corregir
 
         if (desicion.toLowerCase() === "e") {
             lista[Number(seleccion) - 1].editar();
@@ -50,10 +50,10 @@ function detalle_tarea(lista: tarea.Tarea[]) {
 }
 
 // Función para mostrar los detalles de una tarea.
-function detalle_tarea_complemento(lista: tarea.Tarea[], indice: number) {
+function detalle_tarea_complemento(lista: tarea[], indice: number) {
     const elemento = lista[indice - 1];
     // separadorLength obtiene la longitud de la terminal, si no lo deja en 80
-    const separadorLength = process.stdout.columns || 80;
+    const separadorLength = 80; ///no pude usar process de nodejs, por lo tanto lo dejo con base 80
     /// uso separadorLength para saber la cantidad de veces que voy a repetir '-', para adaptarse a cualquier terminal
     const separador = "-".repeat(separadorLength);
 
@@ -92,9 +92,9 @@ function detalle_tarea_complemento(lista: tarea.Tarea[], indice: number) {
     console.log(`Descripción: ${elemento.descripcion}`);
     console.log(`Estado: ${obtenerTextoEstado(elemento.estado)}`);
     console.log(`Dificultad: ${obtenerTextoDificultad(elemento.dificultad)}`);
-    console.log(`Fecha de Creación: ${formatDate(elemento.creacion)}`);
-    console.log(`Última Edición: ${formatDate(elemento.ultima_edicion)}`);
-    console.log(`Fecha de Vencimiento: ${formatDate(elemento.vencimiento) || 'No especificada'}`);
+    console.log(`Fecha de Creación: ${formatDate(elemento.creacion.toISOString())}`);
+    console.log(`Última Edición: ${formatDate(elemento.ultima_edicion.toISOString())}`);
+    console.log(`Fecha de Vencimiento: ${formatDate(elemento.vencimiento.toISOString()) || 'No especificada'}`);
     console.log(separador);
 }
 
@@ -117,7 +117,7 @@ function CasoUno() {
 }
 
 // no es en sí una función buscar, solo muestra los elementos de una lista. El nombre es por conveniencia 
-function buscar_elemento(lista: tarea.Tarea[]) {
+function buscar_elemento(lista: tarea[]) {
     if (lista.length > 0) {
         lista.forEach((elemento, index) => {
             console.log(`${index + 1}. ${elemento.titulo}`);
@@ -129,7 +129,7 @@ function buscar_elemento(lista: tarea.Tarea[]) {
 }
 
 // Función para ver la lista de tareas en estado "Todo".
-function verLista_todo(lista: tarea.Tarea[]) {
+function verLista_todo(lista: tarea[]) {
     if (lista.length > 0) {
         lista.forEach((elemento, index) => {
             console.log(`${index + 1}. ${elemento.titulo}`);
@@ -141,7 +141,7 @@ function verLista_todo(lista: tarea.Tarea[]) {
 }
 
 // Función para ver la lista de tareas en estado "Pendiente".
-function verLista_pendiente(lista: tarea.Tarea[]) {
+function verLista_pendiente(lista: tarea[]) {
     if (lista.length > 0) {
         lista.forEach((elemento, index) => {
             if (elemento.estado === 1) {
@@ -155,7 +155,7 @@ function verLista_pendiente(lista: tarea.Tarea[]) {
 }
 
 // Función para ver la lista de tareas en estado "En Curso".
-function verLista_curso(lista: tarea.Tarea[]) {
+function verLista_curso(lista: tarea[]) {
     if (lista.length > 0) {
         lista.forEach((elemento, index) => {
             if (elemento.estado === 2) {
@@ -169,7 +169,7 @@ function verLista_curso(lista: tarea.Tarea[]) {
 }
 
 // Función para ver la lista de tareas en estado "Finalizado".
-function verLista_terminado(lista: tarea.Tarea[]) {
+function verLista_terminado(lista: tarea[]) {
     if (lista.length > 0) {
         lista.forEach((elemento, index) => {
             if (elemento.estado === 3) {
@@ -186,7 +186,7 @@ let ingreso = 0;
 let condicion = 0;
 let CondicionCasoUno = 0;
 let seleccion = 0;
-const lista: tarea.Tarea[] = [];
+const lista: tarea[] = [];
 
 /// mensaje de presentacion, usando unicode y ansi 
 console.log('\x1b[36mBienvenido al proyecto \x1b[35mAgenda\x1b[0m: aquí podrás organizar tus tareas \u2764️');

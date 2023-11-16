@@ -22,8 +22,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const tarea = __importStar(require("./tarea"));
+const tarea_1 = __importDefault(require("./tarea"));
 const ingreso_datos = __importStar(require("readline-sync")); // ingreso de datos asincrono
 const kleur = __importStar(require("kleur")); // cambia de color texto en terminal
 const emoji = __importStar(require("node-emoji")); // poner emojis
@@ -53,15 +56,15 @@ function agregar_elemento() {
         console.log(`${kleur.green(`1.Facil ${emoji.get('smile')}`)}\n${kleur.yellow(`2.Medio ${emoji.get('neutral_face')}`)}\n${kleur.red(`3.Dificil ${emoji.get('rage')}`)}`);
         dificultad = ingreso_datos.questionInt();
     }
-    return new tarea.Tarea(titulo, descripcion, vencimiento, dificultad);
+    return new tarea_1.default(titulo, descripcion, vencimiento, dificultad);
 }
 // Función para ver los detalles de una tarea.
 function detalle_tarea(lista) {
-    let desicion = 0; // variable de entrada, si decide o no editar la tarea "seleccionada"
+    let desicion; // variable de entrada, si decide o no editar la tarea "seleccionada"
     let seleccion = ingreso_datos.question(`${kleur.blue('Selecciona la tarea que deseas ver')} si no ${kleur.blue('presiona 0')}\n`);
     if (!isNaN(Number(seleccion)) && Number(seleccion) > 0 && Number(seleccion) <= lista.length) {
         detalle_tarea_complemento(lista, Number(seleccion));
-        desicion = ingreso_datos.question(`Si deseas modificar esta tarea ${kleur.blue('presiona e')}. Si no, presiona cualquier otra tecla.\n`);
+        desicion = ingreso_datos.question(`Si deseas modificar esta tarea ${kleur.blue('presiona e')}. Si no, presiona cualquier otra tecla.\n`); //////fija correccion de validacion corregir
         if (desicion.toLowerCase() === "e") {
             lista[Number(seleccion) - 1].editar();
         }
@@ -71,7 +74,7 @@ function detalle_tarea(lista) {
 function detalle_tarea_complemento(lista, indice) {
     const elemento = lista[indice - 1];
     // separadorLength obtiene la longitud de la terminal, si no lo deja en 80
-    const separadorLength = process.stdout.columns || 80;
+    const separadorLength = 80; ///no pude usar process de nodejs, por lo tanto lo dejo con base 80
     /// uso separadorLength para saber la cantidad de veces que voy a repetir '-', para adaptarse a cualquier terminal
     const separador = "-".repeat(separadorLength);
     // Función para obtener el texto correspondiente al estado
@@ -106,9 +109,9 @@ function detalle_tarea_complemento(lista, indice) {
     console.log(`Descripción: ${elemento.descripcion}`);
     console.log(`Estado: ${obtenerTextoEstado(elemento.estado)}`);
     console.log(`Dificultad: ${obtenerTextoDificultad(elemento.dificultad)}`);
-    console.log(`Fecha de Creación: ${formatDate(elemento.creacion)}`);
-    console.log(`Última Edición: ${formatDate(elemento.ultima_edicion)}`);
-    console.log(`Fecha de Vencimiento: ${formatDate(elemento.vencimiento) || 'No especificada'}`);
+    console.log(`Fecha de Creación: ${formatDate(elemento.creacion.toISOString())}`);
+    console.log(`Última Edición: ${formatDate(elemento.ultima_edicion.toISOString())}`);
+    console.log(`Fecha de Vencimiento: ${formatDate(elemento.vencimiento.toISOString()) || 'No especificada'}`);
     console.log(separador);
 }
 // Función para formatear una fecha. Lo siento por el nombre en ingles xd 
